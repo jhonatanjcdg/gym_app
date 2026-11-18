@@ -1,4 +1,5 @@
 import { FullGymBackupData } from '../utils/excel';
+import { syncFullDataToSupabase } from './supabase';
 
 export interface CloudSnapshot {
   id: string;
@@ -34,7 +35,9 @@ export const getCloudConfig = (): CloudConfig => {
   }
   return {
     autoSync: true,
-    provider: 'titan_vault',
+    provider: 'supabase',
+    endpointUrl: 'https://mygqzpjtgexhbmnaatyd.supabase.co',
+    apiKey: 'sb_publishable_gUjDrhKwEQ75HVm4cVyFEg_TG-igZI2',
     syncIntervalMinutes: 5,
   };
 };
@@ -89,8 +92,13 @@ export const executeCloudSync = async (
   data: FullGymBackupData,
   config: CloudConfig
 ): Promise<{ success: boolean; snapshot: CloudSnapshot; message: string }> => {
-  // If custom endpoint is provided, attempt real transmission
-  if (config.endpointUrl && config.endpointUrl.startsWith('http')) {
+  let supabaseResult = null;
+
+  // 1. If Supabase is selected, transmit to Supabase client
+  if (config.provider === 'supabase') {
+    supabaseResult = await syncFullDataToSupabase(data);
+  } else if (config.endpointUrl && config.endpointUrl.startsWith('http')) {
+    // If custom endpoint is provided, attempt real transmission
     try {
       const response = await fetch(config.endpointUrl, {
         method: 'POST',
@@ -112,8 +120,8 @@ export const executeCloudSync = async (
     }
   }
 
-  // Simulate network latency (300ms) for high-end feel
-  await new Promise(res => setTimeout(res, 400));
+  // Simulate network latency (250ms) for high-end feel
+  await new Promise(res => setTimeout(res, 250));
 
   const jsonStr = JSON.stringify(data);
   const sizeBytes = new Blob([jsonStr]).size;
