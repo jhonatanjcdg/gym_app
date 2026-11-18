@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --accent-primary: #10b981;
+    --accent-secondary: #06b6d4;
+    --accent-glow: rgba(16, 185, 129, 0.35);
+  }
+
+  body {
+    background-color: #06080e;
+    color: #e2e8f0;
+  }
+}
+
+/* Custom modern dark scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090d16;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Neon Glow utilities */
+.glow-emerald {
+  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.4));
+}
+
+.glow-cyan {
+  filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.4));
+}
+
+.glow-orange {
+  filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.4));
+}
+
+/* Glass panel style */
+.glass-panel {
+  background: linear-gradient(135deg, rgba(21, 30, 50, 0.7) 0%, rgba(11, 15, 25, 0.85) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-hover:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 20px -5px rgba(16, 185, 129, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Print utilities for receipts & financial reports */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
